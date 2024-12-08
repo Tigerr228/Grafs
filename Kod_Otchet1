@@ -1,0 +1,45 @@
+from collections import deque
+
+def bfs_shortest_paths(graph, start):
+    """
+    Реализация алгоритма BFS для поиска кратчайших путей от стартовой вершины.
+
+    :param graph: Словарь смежности, представляющий граф
+    :param start: Стартовая вершина
+    :return: Словарь расстояний от стартовой вершины до всех остальных
+    """
+    # Инициализация расстояний: ∞ для всех вершин, кроме стартовой
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+
+    # Создание очереди и добавление стартовой вершины
+    queue = deque([start])
+
+    # Цикл обхода
+    while queue:
+        # Извлечение текущей вершины
+        current = queue.popleft()
+
+        # Обработка всех соседей текущей вершины
+        for neighbor in graph[current]:
+            if distances[neighbor] == float('inf'):  # Если сосед ещё не посещён
+                distances[neighbor] = distances[current] + 1  # Обновление расстояния
+                queue.append(neighbor)  # Добавление соседа в очередь
+
+    return distances
+
+
+# Пример использования
+if __name__ == "__main__":
+    # Пример графа (словарь смежности)
+    graph = {
+        'A': ['B', 'C'],
+        'B': ['A', 'D'],
+        'C': ['A', 'D'],
+        'D': ['B', 'C', 'E'],
+        'E': ['D']
+    }
+
+    start_node = 'A'
+    distances = bfs_shortest_paths(graph, start_node)
+    print("Расстояния от вершины", start_node, ":", distances)
